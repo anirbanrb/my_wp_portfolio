@@ -51,11 +51,11 @@ function my_portfolio_setup()
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus(
 		array(
-			'menu-1' => esc_html__('Primary', 'my-portfolio'),
-			'menu-2' => esc_html__('Header Right', 'my-portfolio'),
-			'menu-3' => esc_html__('Footer Menu1', 'my-portfolio'),
-			'menu-4' => esc_html__('Footer Menu2', 'my-portfolio'),
-			'menu-5' => esc_html__('Footer Menu3', 'my-portfolio'),
+			'custom-header-menu' => __('Header Custom Menu', 'my-portfolio'),
+			'my-custom-menu' => __('Custom Menu 1', 'my-portfolio'),
+			'primary-custom-menu' => __('Custom Menu 2', 'my-portfolio'),
+			'secondary-custom-menu' => __('Custom Menu 3', 'my-portfolio'),
+			'tertiary-custom-menu' => __('Custom Menu 4', 'my-portfolio')
 		)
 	);
 
@@ -174,7 +174,31 @@ function my_portfolio_scripts()
 	wp_enqueue_style('my-portfolio-style', get_stylesheet_uri(), array(), _S_VERSION);
 	wp_style_add_data('my-portfolio-style', 'rtl', 'replace');
 
+	// Custom Styles
+	wp_enqueue_style('my-portfolio-google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap', array(), _S_VERSION);
+	wp_enqueue_style('my-portfolio-line-awesome', get_template_directory_uri() . '/assets/css/line-awesome.min.css', array(), _S_VERSION);
+	wp_enqueue_style('my-portfolio-bootstrap', get_template_directory_uri() . '/assets/css/bootstrap.min.css', array(), _S_VERSION);
+	wp_enqueue_style('my-portfolio-owl-carousel', get_template_directory_uri() . '/assets/css/owl.carousel.min.css', array(), _S_VERSION);
+	wp_enqueue_style('my-portfolio-owl-default', get_template_directory_uri() . '/assets/css/owl.theme.default.min.css', array(), _S_VERSION);
+	wp_enqueue_style('my-portfolio-animate', get_template_directory_uri() . '/assets/css/animate.min.css', array(), _S_VERSION);
+	wp_enqueue_style('my-portfolio-smooth-scrollbar', get_template_directory_uri() . '/assets/css/smooth-scrollbar.css', array(), _S_VERSION);
+	wp_enqueue_style('my-portfolio-lightbox', get_template_directory_uri() . '/assets/css/lightbox.min.css', array(), _S_VERSION);
+	wp_enqueue_style('my-portfolio-main-style', get_template_directory_uri() . '/assets/css/style.css', array(), _S_VERSION);
+	wp_enqueue_style('my-portfolio-responsive', get_template_directory_uri() . '/assets/css/responsive.css', array(), _S_VERSION);
+
 	wp_enqueue_script('my-portfolio-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true);
+
+	// Custom Scripts
+	wp_enqueue_script('my-portfolio-jquery', get_template_directory_uri() . '/assets/js/jquery.js', array(), _S_VERSION, true);
+	wp_enqueue_script('my-portfolio-bootstrap', get_template_directory_uri() . '/assets/js/bootstrap.bundle.min.js', array('jquery'), _S_VERSION, true);
+	wp_enqueue_script('my-portfolio-owl-carousel', get_template_directory_uri() . '/assets/js/owl.carousel.js', array('jquery'), _S_VERSION, true);
+	wp_enqueue_script('my-portfolio-gsap', get_template_directory_uri() . '/assets/js/gsap.min.js', array('jquery'), _S_VERSION, true);
+	wp_enqueue_script('my-portfolio-scrollbar', get_template_directory_uri() . '/assets/js/ScrollTrigger.min.js', array('jquery'), _S_VERSION, true);
+	wp_enqueue_script('my-portfolio-scrollbar-plugin', get_template_directory_uri() . '/assets/js/ScrollToPlugin.min.js', array('jquery'), _S_VERSION, true);
+	wp_enqueue_script('my-portfolio-lightbox', get_template_directory_uri() . '/assets/js/lightbox.min.js', array('jquery'), _S_VERSION, true);
+	wp_enqueue_script('my-portfolio-main', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), _S_VERSION, true);
+	wp_enqueue_script('my-portfolio-ajax-form', get_template_directory_uri() . '/assets/js/ajax-form.js', array('jquery'), _S_VERSION, true);
+	wp_enqueue_script('my-portfolio-color', get_template_directory_uri() . '/assets/js/color.js', array('jquery'), _S_VERSION, true);
 
 	if (is_singular() && comments_open() && get_option('thread_comments')) {
 		wp_enqueue_script('comment-reply');
@@ -242,6 +266,8 @@ function fix_svg()
 }
 add_action('admin_head', 'fix_svg');
 
+/* Disable the Admin Bar. */
+add_filter('show_admin_bar', '__return_false');
 
 
 /**
@@ -298,3 +324,31 @@ function mp_login_logo()
 			</style>';
 }
 add_action('login_head', 'mp_login_logo');
+
+
+/**
+ * ACF Options Page
+ */
+//Options Page
+if (function_exists('acf_add_options_page')) {
+
+	acf_add_options_page(array(
+		'page_title'    => 'Theme General Settings',
+		'menu_title'    => 'Theme Settings',
+		'menu_slug'     => 'theme-general-settings',
+		'capability'    => 'edit_posts',
+		'redirect'      => false
+	));
+
+	acf_add_options_sub_page(array(
+		'page_title'    => 'Theme Header Settings',
+		'menu_title'    => 'Header',
+		'parent_slug'   => 'theme-general-settings',
+	));
+
+	acf_add_options_sub_page(array(
+		'page_title'    => 'Theme Footer Settings',
+		'menu_title'    => 'Footer',
+		'parent_slug'   => 'theme-general-settings',
+	));
+}
